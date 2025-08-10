@@ -1,0 +1,139 @@
+.user-management-container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .user-management-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+  
+  .user-form-card {
+    background-color: #fff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+  }
+  
+  .user-form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .user-form-group {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .user-form-group input,
+  .user-form-group select {
+    padding: 0.6rem 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    transition: border-color 0.2s ease-in-out;
+  }
+  
+  .user-form-group input:focus,
+  .user-form-group select:focus {
+    border-color: #5b9dff;
+    outline: none;
+  }
+  
+  .error-message {
+    font-size: 0.8rem;
+    color: red;
+    margin-top: 0.3rem;
+  }
+  
+  .avatar-preview {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 0.5rem;
+  }
+  
+  .permission-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+    max-height: 160px;
+    overflow-y: auto;
+    border: 1px solid #eee;
+    padding: 0.8rem;
+    border-radius: 6px;
+  }
+  
+  .permission-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.9rem;
+  }
+  
+  .working-station-checkboxes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  
+  .user-action-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  
+  .user-action-buttons button {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.95rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .user-action-buttons .save-btn {
+    background-color: #22c55e;
+    color: white;
+  }
+  
+  .user-action-buttons .clear-btn {
+    background-color: #f3f4f6;
+    color: #333;
+  }
+  
+  .user-table-container {
+    background-color: #fff;
+    border-radius: 6px;
+    padding: 1rem;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
+  }
+  
+  .user-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .user-table thead {
+    background-color: #f8f9fa;
+  }
+  
+  .user-table th,
+  .user-table td {
+    padding: 0.75rem;
+    text-align: left;
+    font-size: 0.92rem;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  
+  .user-table tbody tr:hover {
+    background-color: #f1f5f9;
+  }
+  

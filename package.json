@@ -1,22 +1,49 @@
 {
   "name": "ktmcargo-frontend",
-  "license": "0BSD",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
   "dependencies": {
-    "expo": "~52.0.37",
-    "expo-status-bar": "~2.0.1",
-    "react": "18.3.1",
-    "react-native": "0.76.7"
+    "@radix-ui/react-slot": "^1.2.3",
+    "@tanstack/react-table": "^8.21.2",
+    "axios": "^1.8.4",
+    "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
+    "lucide-react": "^0.486.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-icons": "^5.5.0",
+    "react-router-dom": "^6.21.0",
+    "react-scripts": "^5.0.1",
+    "react-toastify": "^11.0.5",
+    "recharts": "^2.15.1",
+    "tailwind-merge": "^3.3.0",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0"
+    "@babel/core": "^7.26.10",
+    "@babel/preset-env": "^7.26.9",
+    "@babel/preset-react": "^7.26.3",
+    "autoprefixer": "^10.4.21",
+    "babel-loader": "^10.0.0",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^4.1.2"
   },
-  "private": true
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
 }

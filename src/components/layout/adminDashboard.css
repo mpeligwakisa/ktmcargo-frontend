@@ -1,0 +1,102 @@
+.ad-wrap {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  
+  .ad-grid {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(1, 1fr);
+  }
+  
+  @media (min-width: 768px) {
+    .ad-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .ad-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  
+  .ad-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    background: #fff;
+  }
+  
+  .ad-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  
+  .ad-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: #555;
+  }
+  
+  .ad-icon {
+    width: 16px;
+    height: 16px;
+    color: #777;
+  }
+  
+  .ad-content .ad-value {
+    font-size: 24px;
+    font-weight: bold;
+    color: #222;
+  }
+  
+  .ad-sub {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-size: 14px;
+    color: #555;
+  }
+  
+  .ad-mini {
+    width: 14px;
+    height: 14px;
+    margin-right: 4px;
+    vertical-align: middle;
+  }
+  
+  .ad-note {
+    font-size: 12px;
+    color: #777;
+    margin-top: 4px;
+  }
+  
+  .ad-charts {
+    display: grid;
+    gap: 24px;
+    grid-template-columns: 1fr;
+  }
+  
+  @media (min-width: 1024px) {
+    .ad-charts {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  
+  .ad-chart-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    background: #fff;
+  }
+  
+  .ad-chart-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }  

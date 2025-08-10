@@ -1,0 +1,106 @@
+.pm-container {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  
+  .pm-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+  }
+  
+  .pm-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .pm-title {
+    font-size: 14px;
+    font-weight: 500;
+  }
+  
+  .pm-amount {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .pm-text {
+    font-size: 12px;
+    color: #666;
+  }
+  
+  .pm-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .pm-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+  }
+  
+  .pm-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  
+  .pm-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .pm-btns {
+    display: flex;
+    gap: 6px;
+  }
+  
+  .pm-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .pm-table th,
+  .pm-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  
+  .table-wrap {
+    overflow-x: auto;
+  }
+  
+  /* Utility classes */
+  .red {
+    color: #e53e3e;
+  }
+  .green {
+    color: #38a169;
+  }
+  .orange {
+    color: #dd6b20;
+  }
+  .yellow {
+    color: #d69e2e;
+  }
+  .gray {
+    color: #a0aec0;
+  }
+  .bold {
+    font-weight: bold;
+  }
+  .mono {
+    font-family: monospace;
+  }
+  .icon {
+    width: 16px;
+    height: 16px;
+  }
+  

@@ -1,0 +1,151 @@
+.dashboard-container {
+    display: flex;
+    height: 100vh;
+  }
+  
+  /* Sidebar Styles */
+  .sidebar {
+    background-color: #242933; /* Dark background color */
+    color: #fff;
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    padding-top: 20px;
+  }
+  
+  .sidebar-header {
+    padding: 20px;
+    text-align: left;
+    margin-bottom: 20px;
+  }
+  
+  .logo-text {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  .sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .sidebar-menu li {
+    padding: 15px 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.3s ease;
+  }
+  
+  .sidebar-menu li.active {
+    background-color: #3366cc; /* Highlight for the active item */
+  }
+  
+  .sidebar-menu li:hover {
+    background-color: #2e333e;
+  }
+  
+  .menu-icon {
+    margin-right: 10px;
+  }
+  
+  .sidebar-footer {
+    margin-top: auto;
+    padding: 20px;
+    border-top: 1px solid #383e47;
+  }
+  
+  .logout-button {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .logout-button:hover {
+    color: #ddd;
+  }
+  
+  /* Main Content Styles */
+  .main-content {
+    flex-grow: 1;
+    background-color: #f4f6f8; /* Light background color */
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .main-header {
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .search-bar {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 5px 10px;
+  }
+  
+  .search-icon {
+    margin-right: 5px;
+    color: #777;
+  }
+  
+  .search-bar input {
+    border: none;
+    outline: none;
+    padding: 8px;
+    font-size: 1rem;
+  }
+  
+  .user-info {
+    display: flex;
+    align-items: center;
+  }
+  
+  .notification-icon {
+    margin-right: 15px;
+    font-size: 1.2rem;
+    color: #777;
+    cursor: pointer;
+  }
+  
+  .user-profile {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .user-icon {
+    background-color: #3366cc;
+    color: #fff;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 5px;
+  }
+  
+  .user-name {
+    font-weight: bold;
+  }
+  
+  .content-area {
+    padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Center the "Loading..." text */
+  }
+  
+  .loading-indicator {
+    font-size: 1.2rem;
+    color: #777;
+  }
