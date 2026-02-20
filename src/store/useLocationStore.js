@@ -1,4 +1,8 @@
 import { create } from 'zustand';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+
+const API_BASE = 'http://127.0.0.1:8000/api/v1';
 
 export const useLocationStore = create((set, get) => ({
   locations: [],
@@ -9,12 +13,28 @@ export const useLocationStore = create((set, get) => ({
   fetchLocations: async () => {
     set({ loading: true, error: null });
     try {
-      const response = await fetch('/api/locations');
-      if (!response.ok) throw new Error('Failed to fetch locations');
-      const data = await response.json();
-      set({ locations: data, loading: false });
+      const token = localStorage.getItem('authToken');
+      if (!token) {
+        toast.error('No authentication token found');
+        set({ loading: false });
+        return;
+      }
+
+      const response = await axios.get(`${API_BASE}/locations`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const locations = response.data.data ?? response.data;
+      set({ 
+        locations,
+        loading: false
+      });
     } catch (error) {
+      console.error(error);
       set({ error: error.message, loading: false });
+      toast.error('Failed to fetch locations');
     }
   },
 
@@ -22,29 +42,27 @@ export const useLocationStore = create((set, get) => ({
   addLocation: async (locationData) => {
     set({ loading: true, error: null });
     try {
-      const response = await fetch('/api/locations', {
-        method: 'POST',
+      const token = localStorage.getItem('authToken');
+      const response = await axios.post(`${API_BASE}/locations`, locationData, {
         headers: {
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
-          'Accept': 'application/json',
         },
-        body: JSON.stringify(locationData),
       });
       
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to create location');
-      }
-      
-      const data = await response.json();
+      const newLocation = response.data.data ?? response.data;
       set((state) => ({
-        locations: [...state.locations, data.location],
+        locations: [...state.locations, newLocation],
         loading: false
       }));
-      return data;
+
+      await get().fetchLocations();
+      toast.success("Location created successfully");
+      return true;
     } catch (error) {
       set({ error: error.message, loading: false });
-      throw error;
+      toast.error("Failed to create location");
+      return false;
     }
   },
 
@@ -52,31 +70,30 @@ export const useLocationStore = create((set, get) => ({
   updateLocation: async (id, locationData) => {
     set({ loading: true, error: null });
     try {
-      const response = await fetch(`/api/locations/${id}`, {
-        method: 'PUT',
+      const token = localStorage.getItem('authToken');
+      const response = await axios.put(`${API_BASE}/locations/${id}`, locationData, {
         headers: {
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
-          'Accept': 'application/json',
         },
-        body: JSON.stringify(locationData),
       });
-      
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to update location');
-      }
-      
-      const data = await response.json();
+
+      const updated = response.data ?? response.data;
       set((state) => ({
-        locations: state.locations.map(loc => 
-          loc.id === id ? { ...loc, ...locationData } : loc
+        locations: state.locations.map(loc =>
+          loc.id === id ? updated : loc
         ),
         loading: false
       }));
-      return data;
+
+      await get().fetchLocations();
+      toast.success("Location updated successfully");
+      return true;
     } catch (error) {
+      console.error(error);
       set({ error: error.message, loading: false });
-      throw error;
+      toast.error("Failed to update location");
+      return false;
     }
   },
 
@@ -84,25 +101,23 @@ export const useLocationStore = create((set, get) => ({
   deleteLocation: async (id) => {
     set({ loading: true, error: null });
     try {
-      const response = await fetch(`/api/locations/${id}`, {
-        method: 'DELETE',
+      const token = localStorage.getItem('authToken');
+      await axios.delete(`${API_BASE}/locations/${id}`, {
         headers: {
-          'Accept': 'application/json',
+          Authorization: `Bearer ${token}`,
         },
       });
-      
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to delete location');
-      }
-      
       set((state) => ({
         locations: state.locations.filter(loc => loc.id !== id),
         loading: false
       }));
+      toast.success("Location deleted successfully");
+      return true;
     } catch (error) {
+      console.error(error);
       set({ error: error.message, loading: false });
-      throw error;
+      toast.error("Failed to delete location");
+      return false;
     }
   },
 

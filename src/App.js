@@ -1,18 +1,18 @@
-import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import { useAuthStore } from '../src/store/authStore';
-import { Layout } from '../src/components/layout/Layout';
-import { Login } from '../src/pages/Login';
+import  React from 'react';
+import  { Routes, Route, Navigate } from 'react-router-dom';
+import  { useAuthStore } from '../src/store/authStore';
+import  { Layout } from '../src/components/layout/Layout';
+import  { Login } from '../src/pages/Login';
 import  Summary  from '../src/pages/Summary';
 import  Clients  from '../src/pages/Clients';
 import  CargoPage  from '../src/pages/CargoPage';
-import  UserManagement  from '../src/pages/UserManagement';
-//import UsersPage from './pages/UserPage';
+import  UserManagement  from './pages/UserManagement';
 import  Payments  from '../src/pages/Payments';
-import Locations from '../src/pages/Locations';
-import Location from './pages/Locations2';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import  Locations from './pages/Locations';
+import TransportPage from './pages/Transport';
+import  Measurements from './pages/Measurement';
+import  { ToastContainer } from 'react-toastify';
+import  'react-toastify/dist/ReactToastify.css';
 
 
 // Protected route component
@@ -52,7 +52,7 @@ function App() {
           <Route path="clients" element={<Clients />} />
           <Route path="cargo" element={<CargoPage />} />
           <Route path="payments" element={<Payments />} />
-          <Route path="location" element={<Locations />} />
+          <Route path="locations" element={<Locations />} />
           <Route 
             path="userManagement" 
             element={
@@ -66,7 +66,8 @@ function App() {
 
 
           {/* Future Placeholder Routes */}
-          <Route path="transportation" element={<div className="p-4">Transportation (Coming Soon)</div>} />
+          <Route path="transport" element={<TransportPage/>} />
+          <Route path="measurement" element={<Measurements />} />
           <Route path="reports" element={<div className="p-4">Reports (Coming Soon)</div>} />
           <Route path="settings" element={<div className="p-4">Settings (Coming Soon)</div>} />
         </Route>

@@ -36,7 +36,8 @@ export const Layout = () => {
       { label: 'Payments', path: '/payments', icon: '💰' },
       { label: 'Settings', path: '/settings', icon: '⚙️' },
       { label: 'Location', path: '/locations', icon: '📍' },
-      { label: 'Transportation', path: '/transportation', icon: '🚚' },
+      { label: 'Transportation', path: '/transport', icon: '🚚' },
+      { label: 'Measurements', path: '/measurement', icon: '⚖️'},
       { label: 'Reports', path: '/reports', icon: '📊' },
       { label: 'User Management', path: '/userManagement', icon: '🧑‍🤝‍🧑' },
     ];
@@ -46,7 +47,7 @@ export const Layout = () => {
       { label: 'Clients', path: '/clients', icon: '👤' },
       { label: 'Cargo', path: '/cargo', icon: '✈️' },
       { label: 'Payments', path: '/payments', icon: '💰' },
-      { label: 'Transportation', path: '/transportation', icon: '🚚' },
+      { label: 'Transportation', path: '/transport', icon: '🚚' },
       { label: 'Reports', path: '/reports', icon: '📊' },
     ];
 

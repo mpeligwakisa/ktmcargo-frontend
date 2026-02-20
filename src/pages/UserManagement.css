@@ -1,4 +1,451 @@
+/* UserManagement.css */
+
+* {
+  box-sizing: border-box;
+}
+
 .user-management-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  background-color: #f8fafc;
+  min-height: 100vh;
+}
+
+.user-management-container h2 {
+  color: #1e293b;
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  text-align: center;
+  border-bottom: 3px solid #3b82f6;
+  padding-bottom: 1rem;
+}
+
+/* Form Styles */
+.user-form {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  margin-bottom: 3rem;
+  border: 1px solid #e2e8f0;
+}
+
+/* Photo Upload */
+.photo-upload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+  gap: 1rem;
+}
+
+.avatar-preview {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #e2e8f0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.avatar-placeholder {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  border: 4px solid #e2e8f0;
+}
+
+.photo-upload input[type="file"] {
+  padding: 8px 16px;
+  border: 2px dashed #cbd5e1;
+  border-radius: 8px;
+  background: #f8fafc;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.photo-upload input[type="file"]:hover {
+  border-color: #3b82f6;
+  background: #eff6ff;
+}
+
+/* Form Row */
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Input and Select Styles */
+.user-form input,
+.user-form select {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: white;
+  color: #374151;
+}
+
+.user-form input:focus,
+.user-form select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  transform: translateY(-1px);
+}
+
+.user-form input::placeholder {
+  color: #9ca3af;
+}
+
+.user-form select {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 12px center;
+  background-repeat: no-repeat;
+  background-size: 16px;
+  appearance: none;
+}
+
+/* Form Group for Permissions and Stations (commented out in JSX but keeping CSS) */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.permissions,
+.stations {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.5rem;
+  padding: 1rem;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.permissions label,
+.stations label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 400;
+  margin-bottom: 0;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.permissions label:hover,
+.stations label:hover {
+  background: #e2e8f0;
+}
+
+.permissions input[type="checkbox"],
+.stations input[type="checkbox"] {
+  width: auto;
+  margin: 0;
+  accent-color: #3b82f6;
+}
+
+/* Form Buttons */
+.form-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.form-buttons button {
+  padding: 12px 32px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-buttons button[type="submit"] {
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  color: white;
+  box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);
+}
+
+.form-buttons button[type="submit"]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px -1px rgba(59, 130, 246, 0.4);
+}
+
+.form-buttons button[type="button"] {
+  background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+  color: white;
+  box-shadow: 0 4px 6px -1px rgba(107, 114, 128, 0.3);
+}
+
+.form-buttons button[type="button"]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px -1px rgba(107, 114, 128, 0.4);
+}
+
+/* Table Styles */
+.users-table {
+  width: 100%;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e2e8f0;
+}
+
+.users-table thead {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+}
+
+.users-table thead th {
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  color: white;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid #475569;
+}
+
+.users-table tbody tr {
+  transition: all 0.2s ease;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.users-table tbody tr:hover {
+  background: #f8fafc;
+  transform: scale(1.001);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.users-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.users-table tbody td {
+  padding: 1rem;
+  color: #374151;
+  font-size: 0.9rem;
+  vertical-align: middle;
+}
+
+.users-table tbody td:first-child {
+  font-weight: 600;
+  color: #1e293b;
+}
+
+/* Action Buttons in Table */
+.users-table td button {
+  padding: 6px 12px;
+  margin: 0 2px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.users-table td button:first-of-type {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+}
+
+.users-table td button:first-of-type:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
+}
+
+.users-table td button:last-of-type {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+}
+
+.users-table td button:last-of-type:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(239, 68, 68, 0.3);
+}
+
+/* Loading State */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  color: #6b7280;
+  font-style: italic;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  color: #6b7280;
+}
+
+.empty-state h3 {
+  margin-bottom: 0.5rem;
+  color: #374151;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .user-management-container {
+    padding: 1rem;
+  }
+
+  .user-form {
+    padding: 1.5rem;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .form-buttons {
+    flex-direction: column;
+  }
+
+  .form-buttons button {
+    width: 100%;
+  }
+
+  .users-table {
+    font-size: 0.8rem;
+  }
+
+  .users-table th,
+  .users-table td {
+    padding: 0.5rem;
+  }
+
+  /* Make table horizontally scrollable on mobile */
+  .users-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .users-table thead,
+  .users-table tbody,
+  .users-table th,
+  .users-table td,
+  .users-table tr {
+    display: block;
+  }
+
+  .users-table thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  .users-table tr {
+    border: 1px solid #ccc;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .users-table td {
+    border: none;
+    position: relative;
+    padding-left: 50%;
+    white-space: normal;
+    text-align: right;
+  }
+
+  .users-table td:before {
+    content: attr(data-label) ": ";
+    position: absolute;
+    left: 6px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    text-align: left;
+    font-weight: bold;
+    color: #374151;
+  }
+}
+
+@media (max-width: 480px) {
+  .user-management-container h2 {
+    font-size: 1.5rem;
+  }
+
+  .avatar-preview,
+  .avatar-placeholder {
+    width: 80px;
+    height: 80px;
+  }
+
+  .permissions,
+  .stations {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Animation for form submission */
+@keyframes submitPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.form-buttons button[type="submit"]:active {
+  animation: submitPulse 0.3s ease;
+}
+
+/* Toast customization */
+.Toastify__toast-container {
+  font-family: inherit;
+}
+
+.Toastify__toast {
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* .user-management-container {
     padding: 2rem;
     max-width: 1200px;
     margin: 0 auto;
@@ -136,4 +583,4 @@
   .user-table tbody tr:hover {
     background-color: #f1f5f9;
   }
-  
+   */

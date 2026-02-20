@@ -27,6 +27,29 @@ export const useClientStore = create((set, get) => ({
     return { ...filters, page: currentPage, per_page: perPage };
   },
 
+  handleChange: (e) => {
+    const { name, value, type, checked, files } = e.target;
+    const formData = get().formData;
+
+    if (type === 'checkbox' && name === 'permissions') {
+      const updated = checked
+        ? [...formData.permissions, value]
+        : formData.permissions.filter(p => p !== value);
+      set({ formData: { ...formData, permissions: updated } });
+    } 
+    //else if (type === 'checkbox' && name === 'stations') {
+    //   const updated = checked
+    //     ? [...formData.stations, value]
+    //     : formData.stations.filter(s => s !== value);
+    //   set({ formData: { ...formData, stations: updated } });
+    // } 
+    else if (type === 'file') {
+      set({ formData: { ...formData, photo: files[0] } });
+    } else {
+      set({ formData: { ...formData, [name]: value } });
+    }
+  },
+
   // ✅ Fetch clients
   fetchClients: async (params = {}) => {
     set({ isLoading: true });
@@ -34,20 +57,25 @@ export const useClientStore = create((set, get) => ({
       const { search, location, page, per_page } = { ...get().getFetchParams(), ...params };
       const token = localStorage.getItem('authToken');
 
-      const response = await axios.get(`${API_BASE}/clients`, {
-        params: { search, location, page, per_page },
-        headers: { Authorization: `Bearer ${token}` },
+      const response = await axios.get(`${API_BASE}/clients`, 
+      {
+        params: { search, location_id:location, page, per_page },
+        headers: { Authorization: `Bearer ${token}`, Accept: 'application/json', },
+        
       });
 
+      console.log("Stored Token:", localStorage.getItem("authToken"));
+
+
       //const data = response.data.clients.data || {}; // Laravel response: { clients: {data, current_page, total, ...} }
-      const paginated = response.data.clients || {};
-      console.log('Fetched clients:', paginated);
+      const data = response.data;
+      console.log('Fetched clients list:', data.data);
       set({
-        clients: paginated.data || [],
-        currentPage: paginated.current_page || 1,
-        totalPages: paginated.last_page || 1,
-        perPage: paginated.per_page || 10,
-        totalClients: paginated.total || 0,
+        clients: data.data || [],
+        currentPage: data.meta?.current_page || 1,
+        totalPages: data.meta?.last_page || 1,
+        perPage: data.meta?.per_page || 10,
+        totalClients: data.meta?.total || 0,
         isLoading: false,
       });
     } catch (error) {
@@ -61,11 +89,11 @@ export const useClientStore = create((set, get) => ({
   fetchLocations: async () => {
     try {
       const token = localStorage.getItem('authToken');
-      const res = await axios.get(`${API_BASE}/locations`, {
+      const res = await axios.get(`${API_BASE}/clients/form-options`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      set({ locations: res.data || [] });
-      console.log('Fetched locations:', res.data);
+      set({ locations: res.data.locations || [] });
+      console.log('Fetched locations:', res.data.locations);
     } catch (err) {
       console.error(err);
       toast.error('Failed to load locations');
@@ -74,20 +102,20 @@ export const useClientStore = create((set, get) => ({
 
   // ✅ Add new client
   addClient: async (clientData) => {
+    console.log("Submitting clientData:", clientData);
     set({ isLoading: true });
     try {
       const token = localStorage.getItem('authToken');
       await axios.post(`${API_BASE}/clients`, clientData, {
         headers: { Authorization: `Bearer ${token}`, Accept: 'application/json', },
       });
-      toast.success('Client added');
-      await get().fetchClients();
-      return true;
+      toast.success('Client added successfully');
+      get().fetchClients();
+      set({isLoading: false});
     } catch (error) {
       console.error(error);
       toast.error('Failed to add client');
       set({ isLoading: false });
-      return false;
     }
   },
 

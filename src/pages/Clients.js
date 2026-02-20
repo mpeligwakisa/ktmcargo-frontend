@@ -33,11 +33,11 @@ const Clients = () => {
     currentPage,
     totalPages,
     fetchClients,
+    fetchFormOptions,
     fetchLocations,
     addClient,
     editClient,
     deleteClient,
-    setFilters,
     setCurrentPage,
   } = useClientStore();
   const [searchTerm, setSearchTerm] = useState('');
@@ -51,15 +51,14 @@ const Clients = () => {
     location_id: '',
   });
   const [errors, setErrors] = useState({});
-  //const [currentPage,setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-
-  const location = user?.role === 'admin' ? 'All' : user?.location_id || '';
-  
+ 
   useEffect(() => {
-    fetchClients(locationFilter);
-    fetchLocations();
-  }, [locationFilter, fetchClients, fetchLocations]);
+    fetchClients();
+    if(user?.role === 'admin'){
+      fetchLocations();
+    }
+  }, [fetchLocations, fetchClients, user]);
 
   const resetForm = () => {
     setFormData({
@@ -85,7 +84,7 @@ const Clients = () => {
       errors.phone = 'Phone is required';
     }
     if (!formData.gender) {
-      errors.gender = 'Gender equired';
+      errors.gender = 'Gender required';
     }
     if (user?.role === 'admin' && !formData.location_id) {
       errors.location_id = 'Location is required';
@@ -100,34 +99,22 @@ const Clients = () => {
 
     const payload = {
       ...formData,
-      location_id: user?.role === 'admin' ? formData.location_id : user?.location_id || '',
+      location_id: user?.role === 'admin' ? Number(formData.location_id): user?.location_id,
     };
     let success = false;
 
-    try {
-      if (isEditingId) {
-         success = await editClient(isEditingId, payload); // <- implement this in store if needed
-         if (success) toast.success('Client updated successfully');
-      } else{
-        success = await addClient(payload);
-        if (success) toast.success('Client added successfully');
-      }
-      if (success) {
-        await fetchClients(locationFilter);
-      setIsModalOpen(false);
-      resetForm();
-      // setFormData({
-      //   name: '',
-      //   email: '',
-      //   phone: '',
-      //   gender: '',
-      //   location: '',
-      // });
-      setEditingId(null);
-      }
-    } catch (error) {
-      toast.error('failed to save Client');
-      console.error('Error adding Client:', error);
+    
+    if (isEditingId) {
+        success = await editClient(isEditingId, payload); // <- implement this in store if needed
+        if (success) toast.success('Client updated successfully');
+    } else{
+      success = await addClient(payload);
+      if (success) toast.success('Client added successfully');
+    }
+    if (success) {
+      await fetchClients();
+    setIsModalOpen(false);
+    resetForm();
     }
   };
 
@@ -148,19 +135,9 @@ const Clients = () => {
     const success = await deleteClient(id);
     if(success){
       toast.success('Client deleted successfully');
-      fetchClients(locationFilter);
+      fetchClients();
     }
-  //  try {
-      
-  //     toast.success('Client deleted successfully');
-  //   } catch(error) {
-  //     toast.error('Error deleting Client');
-  //   }
   };
-
-  // const handlePageChange = (newPage) => {
-  //   setCurrentPage(Math.min(Math.max(1, newPage), totalPages));
-  // };
 
   const exportData = () => {
     const csv = 
@@ -174,12 +151,11 @@ const Clients = () => {
     a.click();
   };
 
-  const filtered = Array.isArray(clients) ? clients.filter(c =>
+  const filtered = clients.filter(c =>
     c.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     c.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     c.phone?.includes(searchTerm)
-  )
-   : [];
+  );
 
   const start = (currentPage - 1) * rowsPerPage;
   const end = start + rowsPerPage;
@@ -189,7 +165,7 @@ const Clients = () => {
       <div className="header-container">
         <h1 className="page-title">Clients</h1>
         <Button variant="outline" onClick={exportData} className="export-button">
-          <Download className="mr-2 h-4 w-4" /> 
+          <Download className="download-btn" /> 
           Export Data
         </Button>
       </div>
@@ -381,41 +357,32 @@ const Clients = () => {
                     />
                     {errors.phone && <p className="error-message">{errors.phone}</p>}
                   </div>
+
                   <div className="form-group">
-                    <Input
-                      placeholder="Gender"
-                      value={formData.gender}
-                      onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
-                      className={`form-input ${errors.gender ? 'error' : ''}`}
-                    />
+                    <select name="gender" value={formData.gender} onChange={(e) => setFormData({ ...formData, gender: e.target.value})}>
+                      <option value="">Select Gender</option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                    </select>
+                    {/* <Input
+                    //   placeholder="Gender"
+                    //   value={formData.gender}
+                    //   onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
+                    //   className={`form-input ${errors.gender ? 'error' : ''}`}
+                     />*/}
                     {errors.gender && <p className="error-message">{errors.gender}</p>}
-                  </div>
+                  </div> 
                   
                   {user?.role === 'admin' && (
-                    <div className="form-group">
-                      <Select
-                        value={formData.location_id?.toString() || ''}
-                        onValueChange={(v) =>
-                          setFormData({ ...formData, location_id: v })
-                        }
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select Location" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            {locations.map((loc) => (
-                              <SelectItem key={loc.id} value={loc.id.toString()}>
-                                {loc.name}
-                              </SelectItem>
-                            ))}
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                      {errors.location_id && (
-                        <p className="error-message">{errors.location_id}</p>
-                      )}
-                    </div>
+                    <div className="form-row">
+                    <select name="location_id" value={formData.location_id || ""} onChange={(e) => setFormData({ ...formData, location_id: e.target.value})}>
+                      <option value="">Select Location</option>
+                      {Array.isArray(locations) && locations.map(loc => (
+                        <option key={loc.id} value={loc.id}>{loc.name}</option>
+                      ))}
+                    </select>
+                    {/* {errors.gender && <p className="error-message">{errors.gender}</p>} */}
+                  </div>
                   )}
                 </div>
 

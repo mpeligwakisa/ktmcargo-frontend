@@ -1,43 +1,153 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './UserManagement.css';
 import { useUserManagement } from '../store/useUserManagement';
+import Locations from './Locations3';
 
-const availablePermissions = [
-  'Account Create', 'Account Delete', 'Account Edit', 'Account View',
-  'Activities View',
-  'Agreement Create', 'Agreement Delete', 'Agreement Edit', 'Agreement View'
-];
+// const availablePermissions = [
+//   'Account Create', 'Account Delete', 'Account Edit', 'Account View',
+//   'Activities View',
+//   'Agreement Create', 'Agreement Delete', 'Agreement Edit', 'Agreement View'
+// ];
 
-const availableStations = [
-  'Head Office', 'Location', 'Market Center', 'Warehouse', 'Buying Line'
-];
+// const availableStations = [
+//   'Head Office', 'Location', 'Market Center', 'Warehouse', 'Buying Line'
+// ];
 
 const UserManagement = () => {
   const {
-    formData,
     users,
-    roles,
+    role,
     status,
-    locations,
+    location,
     isLoading,
-    setFormData,
     fetchUsers,
     fetchFormOptions,
-    handleChange,
-    submitUser,
-    resetForm
+    //handleChange,
+    //resetForm,
+    addUser,
+    updateUser,
+    deleteUser,
+    //editUser,
+    editingUser
   } = useUserManagement();
+  const [isEditingId, setEditingId] = useState(null);
+  const [formData, setFormData] = useState({
+    first_name: "",
+    middle_name: "",
+    last_name: "",
+    gender: "",
+    email: "",
+    phone: "",
+    role_id: "",
+    location_id: "",
+    status_id: "",
+    password: "",
+    confirmPassword: "",
+    photo: null,
+  });
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     fetchUsers();
     fetchFormOptions();
-  }, []);
+  }, [fetchUsers, fetchFormOptions]);
+
+  const resetForm = () => {
+    setFormData({
+      first_name: "",
+      middle_name: "",
+      last_name: "",
+      gender: "",
+      email: "",
+      phone: "",
+      role_id: "",
+      location_id: "",
+      status_id: "",
+      password: "",
+      confirmPassword: "",
+      photo: null,
+    });
+    setEditingId(null);
+    setErrors({});
+  };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await submitUser();
+
+    // build FormData for file + text inputs
+  const formDataToSend = new FormData();
+  Object.keys(formData).forEach((key) => {
+    if (formData[key] !== null) {
+      formDataToSend.append(key, formData[key]);
+    }
+  });
+
+    let success = false;
+
+    if (isEditingId) {
+      success = await updateUser(isEditingId, formDataToSend, true); // true = multipart
+      if (success) toast.success("User updated successfully");
+    } else {
+      success = await addUser(formDataToSend, true);
+      if (success) toast.success("User added successfully");
+    }
+
+    //const payload = {...formData};
+
+    // if (isEditingId) {
+    //   success = await updateUser(isEditingId, payload);
+    //   if (success) toast.success("User updated successfully");
+    // } else {
+    //   success = await addUser(payload);
+    //   if (success) toast.success("User added successfully");
+    // }
+
+    if (success) {
+      await fetchUsers();
+      resetForm();
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value, type, files } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "file" ? files[0] : value,
+    }));
+  };
+  
+
+  // === Edit Handler ===
+  const handleEdit = (user) => {
+    setEditingId(user.id);
+    setFormData({
+      first_name: user.people?.first_name || "",
+      middle_name: user.people?.middle_name || "",
+      last_name: user.people?.last_name || "",
+      gender: user.people?.gender || "",
+      email: user.email || "",
+      phone: user.phone || "",
+      role_id: user.role?.id || "",
+      location_id: user.location?.id || "",
+      status_id: user.status?.id || "",
+      password:"",
+      confirmPassword: "",
+      photo: null,
+    });
+    //setIsModalOpen(true);
+  };
+
+  // === Delete Handler ===
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this user?")) return;
+    const success = await deleteUser(id);
+    if (success) {
+      toast.success("User deleted successfully");
+      fetchUsers();
+    }
   };
 
   return (
@@ -60,9 +170,12 @@ const UserManagement = () => {
         </div>
 
         <div className="form-row">
-          <input name="firstName" placeholder="First Name" value={formData.firstName} onChange={handleChange} />
-          <input name="middleName" placeholder="Middle Name" value={formData.middleName} onChange={handleChange} />
-          <input name="lastName" placeholder="Last Name" value={formData.lastName} onChange={handleChange} />
+          <input name="first_name" placeholder="First Name" value={formData.first_name} onChange={handleChange} />
+          {errors.first_name && <p className="error">{errors.first_name[0]}</p>}
+          <input name="middle_name" placeholder="Middle Name" value={formData.middle_name} onChange={handleChange} />
+          {errors.last_name && <p className="error">{errors.middle_name[0]}</p>}
+          <input name="last_name" placeholder="Last Name" value={formData.last_name} onChange={handleChange} />
+          {errors.middle_name && <p className="error">{errors.last_name[0]}</p>}
         </div>
 
         <div className="form-row">
@@ -72,32 +185,33 @@ const UserManagement = () => {
             <option value="female">Female</option>
           </select>
 
-          <input name="staffNumber" placeholder="Staff #" value={formData.staffNumber} onChange={handleChange} />
+          {/* <input name="staffNumber" placeholder="Staff #" value={formData.staffNumber} onChange={handleChange} /> */}
 
           <select name="status_id" value={formData.status_id} onChange={handleChange}>
             <option value="">Select Status</option>
-            {status.map(status =>(
-              <option key={status.id} value={status.id}>{status.description}</option>
+            {status.map(s =>(
+              <option key={s.id} value={s.id}>{s.description}</option>
             ))}
           </select>
+          
         </div>
 
         <div className="form-row">
-          <select name="roles_id" value={formData.role_id} onChange={handleChange}>
+          <select name="role_id" value={formData.role_id} onChange={handleChange}>
             <option value="">Select Role</option>
-            {roles.map(role => (
-              <option key={role.id} value={role.id}>{role.name}</option>
+            {role.map(r => (
+              <option key={r.id} value={r.id}>{r.name}</option>
             ))}
           </select>
-          <input name="mobile" placeholder="Mobile" value={formData.mobile} onChange={handleChange} />
-          <input name="personalCode" placeholder="Personal Code" value={formData.personalCode} onChange={handleChange} />
+          <input name="phone" placeholder="Mobile" value={formData.phone} onChange={handleChange} />
+          {/* <input name="personalCode" placeholder="Personal Code" value={formData.personalCode} onChange={handleChange} /> */}
         </div>
 
          {/* Location */}
         <div className="form-row">
           <select name="location_id" value={formData.location_id} onChange={handleChange}>
             <option value="">Select Location</option>
-            {locations.map(loc => (
+            {Array.isArray(location) && location.map(loc => (
               <option key={loc.id} value={loc.id}>{loc.name}</option>
             ))}
           </select>
@@ -105,6 +219,7 @@ const UserManagement = () => {
 
         <div className="form-row">
           <input name="email" placeholder="Email/Username" value={formData.email} onChange={handleChange} />
+          {errors.email && <p className="error">{errors.email[0]}</p>}
           <input name="password" type="password" placeholder="Password" value={formData.password} onChange={handleChange} />
           <input name="confirmPassword" type="password" placeholder="Confirm Password" value={formData.confirmPassword} onChange={handleChange} />
         </div>
@@ -146,7 +261,9 @@ const UserManagement = () => {
         </div> */}
 
         <div className="form-buttons">
-          <button type="submit">Save</button>
+          <button type="submit">
+            {isEditingId ? 'Update':'Save'}
+            </button>
           <button type="button" onClick={resetForm}>Clear</button>
         </div>
       </form>
@@ -156,7 +273,6 @@ const UserManagement = () => {
         <thead>
           <tr>
             <th>Full Name</th>
-            <th>Staff #</th>
             <th>Email</th>
             <th>Role</th>
             <th>Location</th>
@@ -165,14 +281,28 @@ const UserManagement = () => {
           </tr>
         </thead>
         <tbody>
-          {users.map(u => (
+          {(users || []).map(u => (
             <tr key={u.id}>
-              <td>{u.firstName} {u.middleName} {u.lastName}</td>
-              <td>{u.staffNumber}</td>
+              <td>{u.people?.first_name}{""} {u.people?.middle_name || ''}{""} {u.people?.last_name}</td>
               <td>{u.email}</td>
-              <td>{u.groupName}</td>
-              <td>{u.location?.name}</td>
-              <td>{u.status?.description}</td>
+              <td>{u.role?.name || "N/A"}</td>
+              <td>{u.location?.name || "N/A"}</td>
+              <td>{u.status?.description || "N/A"}</td>
+              <td>
+                <button 
+                  className="btn-edit"
+                  onClick={() => handleEdit(u)
+                }
+                >
+                  Edit
+                </button>
+                <button
+                  className = "btn-delete"
+                  onClick={() => handleDelete(u.id)}
+                >
+                  Delete
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
