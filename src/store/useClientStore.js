@@ -8,7 +8,7 @@ const API_BASE = 'http://127.0.0.1:8000/api/v1';
 
 export const useClientStore = create((set, get) => ({
   clients: [],
-  locations:[],
+  locations: [],
   isLoading: false,
   error: null,
   currentPage: 1,
@@ -36,7 +36,7 @@ export const useClientStore = create((set, get) => ({
         ? [...formData.permissions, value]
         : formData.permissions.filter(p => p !== value);
       set({ formData: { ...formData, permissions: updated } });
-    } 
+    }
     //else if (type === 'checkbox' && name === 'stations') {
     //   const updated = checked
     //     ? [...formData.stations, value]
@@ -57,12 +57,12 @@ export const useClientStore = create((set, get) => ({
       const { search, location, page, per_page } = { ...get().getFetchParams(), ...params };
       const token = localStorage.getItem('authToken');
 
-      const response = await axios.get(`${API_BASE}/clients`, 
-      {
-        params: { search, location_id:location, page, per_page },
-        headers: { Authorization: `Bearer ${token}`, Accept: 'application/json', },
-        
-      });
+      const response = await axios.get(`${API_BASE}/clients`,
+        {
+          params: { search, location_id: location, page, per_page },
+          headers: { Authorization: `Bearer ${token}`, Accept: 'application/json', },
+
+        });
 
       console.log("Stored Token:", localStorage.getItem("authToken"));
 
@@ -111,7 +111,7 @@ export const useClientStore = create((set, get) => ({
       });
       toast.success('Client added successfully');
       get().fetchClients();
-      set({isLoading: false});
+      set({ isLoading: false });
     } catch (error) {
       console.error(error);
       toast.error('Failed to add client');

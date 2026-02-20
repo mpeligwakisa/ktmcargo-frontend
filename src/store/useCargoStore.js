@@ -6,10 +6,10 @@ const API_BASE = "http://127.0.0.1:8000/api/v1";
 
 export const useCargoStore = create((set, get) => ({
   cargos: [],
-  clients:[],
-  measurements:[],
-  transports:[],
-  locations:[],
+  clients: [],
+  measurements: [],
+  transports: [],
+  locations: [],
   selectedCargo: null,
   isLoading: false,
   error: null,
