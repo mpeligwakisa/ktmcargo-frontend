@@ -8,7 +8,7 @@ export const useCargoStore = create((set, get) => ({
   cargos: [],
   clients: [],
   measurements: [],
-  transports: [],
+  transportModes: [],
   locations: [],
   selectedCargo: null,
   isLoading: false,
@@ -69,26 +69,31 @@ export const useCargoStore = create((set, get) => ({
     }
   },
 
-  addCargo: async (cargoData) => {
+  addCargo: async (formData) => {
     try {
       const token = localStorage.getItem("authToken");
-      // const payload = {
-      //   client_id: cargoData.client_id,
-      //   measurement_id: cargoData.measurement_id,
-      //   transport_id: cargoData.transport_id,
-      //   origin_country: cargoData.origin_loaction_id, // location id
-      //   destination: cargoData.destination_location_id,       // location id
-      //   cargo_name: cargoData.cargo_name,
-      //   quantity: cargoData.quantity,
-      //   weight: cargoData.weight,
-      //   length: cargoData.length,
-      //   width: cargoData.width,
-      //   height: cargoData.height,
-      //   value: cargoData.value,
-      //   packaging: cargoData.packaging,
-      //   instructions: cargoData.instructions,
-      // };
-      const res = await axios.post(`${API_BASE}/cargo`, cargoData, {
+      const payload = {
+        client_id: formData.client_id,
+        cargo_name: formData.cargo_name,
+        container_number: formData.container_number,
+        category: formData.category,
+        quantity: formData.quantity,
+        measurement_id: formData.measurement_id,
+        unit_type: formData.unit_type,
+        weight_cbm:
+          formData.unit_type === "KG"
+            ? formData.weight
+            : (formData.length * formData.width * formData.height) / 1000000,
+        value: formData.value,
+        origin_location_id: formData.origin_location_id,
+        destination_location_id: formData.destination_location_id,
+        transport_id: formData.transport_id,
+        packaging: formData.packaging,
+        status: formData.status,
+        special_instructions: formData.special_instructions,
+        eta: formData.eta,
+      };
+      const res = await axios.post(`${API_BASE}/cargo`, payload, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -104,10 +109,33 @@ export const useCargoStore = create((set, get) => ({
     }
   },
 
-  updateCargo: async (id, cargoData) => {
+  updateCargo: async (id, formData) => {
     try {
       const token = localStorage.getItem("authToken");
-      const res = await axios.put(`${API_BASE}/cargo/${id}`, cargoData, {
+
+      const payload = {
+        client_id: formData.client_id,
+        cargo_name: formData.cargo_name,
+        container_number: formData.container_number,
+        category: formData.category,
+        quantity: formData.quantity,
+        measurement_id: formData.measurement_id,
+        unit_type: formData.unit_type,
+        weight_cbm:
+          formData.unit_type === "KG"
+            ? formData.weight
+            : (formData.length * formData.width * formData.height) / 1000000,
+        value: formData.value,
+        origin_location_id: formData.origin_location_id,
+        destination_location_id: formData.destination_location_id,
+        transport_id: formData.transport_id,
+        packaging: formData.packaging,
+        status: formData.status,
+        special_instructions: formData.special_instructions,
+        eta: formData.eta,
+      };
+
+      const res = await axios.put(`${API_BASE}/cargo/${id}`, payload, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

@@ -80,7 +80,7 @@ function CargoPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // 🧮 Compute the correct weight_cbm before sending
-    let weight_cbm = 0;
+    //let weight_cbm = 0;
     if (formData.unit_type === "KG") {
       weight_cbm = formData.weight || 0;
     } else if (formData.unit_type === "CBM") {
@@ -123,7 +123,7 @@ function CargoPage() {
       origin_location_id: "",
       destination_location_id: "",
       transport_id: "",
-      status: "",
+      //status: "",
       eta: "",
       // client_id: "",
       // cargo_name: "",
@@ -153,33 +153,19 @@ function CargoPage() {
       quantity: cargo.quantity || "",
       measurement_id: cargo.measurement_id || "",
       unit_type: cargo.unit_type || "",
-      weight: cargo.unit_type === "KG" ? cargo.weight_cbm : "",
+      weight: cargo.unit_type === "KG" ? cargo.weight : "",
       length: cargo.unit_type === "CBM" ? cargo.length : "",
       width: cargo.unit_type === "CBM" ? cargo.width : "",
       height: cargo.unit_type === "CBM" ? cargo.height : "",
+      value: cargo.value,
       category: cargo.category || "",
       container_number: cargo.container_number || "",
       special_instructions: cargo.special_instructions || "",
       origin_location_id: cargo.origin_location_id || "",
       destination_location_id: cargo.destination_location_id || "",
       transport_id: cargo.transport_id || "",
-      status: cargo.status || "",
+      //status: cargo.status || "",
       eta: cargo.eta || "",
-      // client_id: cargo.client_id || "",
-      // cargo_name: cargo.cargo_name || "",
-      // quantity: cargo.quantity || "",
-      // measurement_id: cargo.measurement_id || "",
-      // unit_type: cargo.unit_type || "",
-      // weight: cargo.weight || "",
-      // length: cargo.length || "",
-      // width: cargo.width || "",
-      // height: cargo.height || "",
-      // value: cargo.value || "",
-      // origin_location_id: cargo.origin_location_id || cargo.origin_location_id?.id || "",
-      // destination_location_id: cargo.destination_location_id || cargo.destination_location_id?.id || "",
-      // transport_id: cargo.transport_id || cargo.transport_id?.id || "",
-      // packaging: cargo.packaging || "",
-      // instructions: cargo.instructions || "",
     });
     setIsModalOpen(true);
   };
@@ -295,12 +281,11 @@ function CargoPage() {
                         setFormData({
                           ...formData,
                           measurement_id: e.target.value,
-                          unit_type: selected?.unit || "",
-                          weight_cbm: "", // reset value when unit changes
+                          unit_type: selected.unit || "",
+                          weight: "", // reset value when unit changes
                           length: "",
                           width: "",
                           height: "",
-                          weight: ""
                           //unit_type: selectedMeasurement ? selectedMeasurement.unit_type : ""
                         });
                       }
@@ -318,14 +303,17 @@ function CargoPage() {
 
                   {/* Show weight if kg */}
                   {formData.unit_type === "KG" && (
-                    <input
-                      type="number"
-                      id="weight"
-                      value={formData.weight}
-                      onChange={handleChange}
-                      placeholder="Weight (kg)"
-                      className="form-input"
-                    />
+                    <div className="kg-grid">
+                      <input
+                        type="number"
+                        id="weight"
+                        value={formData.weight}
+                        onChange={handleChange}
+                        placeholder="Weight (KG)"
+                        className="form-input"
+                        required
+                      />
+                    </div>
                   )}
 
                   {/* Show dimension fields if cbm */}
@@ -338,6 +326,7 @@ function CargoPage() {
                         onChange={handleChange}
                         placeholder="Length (cm)"
                         className="form-input"
+                        required
                       />
                       <input
                         type="number"
@@ -346,6 +335,7 @@ function CargoPage() {
                         onChange={handleChange}
                         placeholder="Width (cm)"
                         className="form-input"
+                        required
                       />
                       <input
                         type="number"
@@ -354,13 +344,14 @@ function CargoPage() {
                         onChange={handleChange}
                         placeholder="Height (cm)"
                         className="form-input"
+                        required
                       />
-                      <div className="cbm-result">
+                      {/* <div className="cbm-result">
                         CBM:{" "}
                         {formData.length && formData.width && formData.height
                           ? ((formData.length * formData.width * formData.height) / 1000).toFixed(2)
                           : 0}
-                      </div>
+                      </div> */}
                     </div>
                   )}
 
@@ -445,7 +436,7 @@ function CargoPage() {
                   </select>
 
                   {/* Status */}
-                  <select
+                  {/* <select
                     id="status"
                     value={formData.status}
                     onChange={handleChange}
@@ -456,8 +447,17 @@ function CargoPage() {
                     <option value="in_transit">In Transit</option>
                     <option value="delivered">Delivered</option>
                     <option value="cancelled">Cancelled</option>
-                  </select>
+                  </select> */}
 
+                  {/* ETA Date */}
+                  <input
+                    type="date"
+                    id="eta"
+                    value={formData.eta || ""}
+                    onChange={handleChange}
+                    className="form-input"
+                    placeholder="Estimated Arrival Date"
+                  />
                   <textarea
                     id="special_instructions"
                     value={formData.special_instructions}
@@ -467,6 +467,7 @@ function CargoPage() {
                     rows="3"
                   />
                 </div>
+                <div></div>
                 <div className="flex justify-end gap-2">
                   <Button type="button" variant="secondary" onClick={clearForm}>
                     Clear
@@ -498,6 +499,7 @@ function CargoPage() {
                 <TableHead>Transport Mode</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>ETA</TableHead>
+                <TableHead>Days Remaining</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -509,7 +511,7 @@ function CargoPage() {
                   <TableCell>{c.cargo_name}</TableCell>
                   <TableCell>{c.quantity}</TableCell>
                   <TableCell>
-                    {c.unit_type === "kg"
+                    {c.unit_type === "KG"
                       ? `${c.weight_cbm} kg`
                       : `${c.weight_cbm} cbm`
                       // : `${c.length}x${c.width}x${c.height} cm (${(
@@ -518,11 +520,12 @@ function CargoPage() {
                       //   ).toFixed(2)} cbm)`
                     }
                   </TableCell>
-                  <TableCell>{c.origin_location_id?.name}</TableCell>
-                  <TableCell>{c.destination_location_id?.name}</TableCell>
-                  <TableCell>{c.transport_id?.name}</TableCell>
+                  <TableCell>{c.originLocation?.name}</TableCell>
+                  <TableCell>{c.destinationLocation?.name}</TableCell>
+                  <TableCell>{c.transport?.name}</TableCell>
                   <TableCell>{c.status}</TableCell>
                   <TableCell>{c.eta ? new Date(c.eta).toLocaleDateString() : "N/A"}</TableCell>
+                  <TableCell>{c.remaining_days || "N/A"}</TableCell>
                   <TableCell>
                     <div className="flex gap-2">
                       <Button size="sm" variant="outline" onClick={() => handleCargoSelect(c)}>

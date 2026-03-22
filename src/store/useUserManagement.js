@@ -102,80 +102,129 @@ export const useUserManagement = create((set, get) => ({
    // =========================
   // ADD USER
   // =========================
-  addUser: async () => {
-    const formData = get().formData;
+  // addUser: async () => {
+  //   const formData = get().formData;
 
-    if (formData.password !== formData.confirmPassword) {
-      toast.error('Passwords do not match');
-      return;
-    }
+  //   if (formData.password !== formData.confirmPassword) {
+  //     toast.error('Passwords do not match');
+  //     return;
+  //   }
 
-    const payload = {
-      first_name: formData.first_name,
-      middle_name: formData.middle_name,
-      last_name: formData.last_name,
-      gender: formData.gender,
-      role_id: formData.role_id,
-      status_id: formData.status_id,
-      location_id: formData.location_id,
-      phone: formData.phone,
-      email: formData.email,
-      password: formData.password,
-    };
+  //   const payload = {
+  //     first_name: formData.first_name,
+  //     middle_name: formData.middle_name,
+  //     last_name: formData.last_name,
+  //     gender: formData.gender,
+  //     role_id: formData.role_id,
+  //     status_id: formData.status_id,
+  //     location_id: formData.location_id,
+  //     phone: formData.phone,
+  //     email: formData.email,
+  //     password: formData.password,
+  //   };
 
-    set({ isLoading: true });
-    try {
-      const token = localStorage.getItem('authToken');
-      await axios.post(`${API_BASE}/users`, payload, {
-        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-      });
-      toast.success('User created successfully');
-      await get().fetchUsers();
-      get().resetForm();
-    } catch (err) {
-      console.error('Add User Error', err.response?.data);
-      toast.error(err.response?.data?.message || 'Failed to create user');
-    } finally {
-      set({ isLoading: false });
-    }
-  },
+  //   set({ isLoading: true });
+  //   try {
+  //     const token = localStorage.getItem('authToken');
+  //     await axios.post(`${API_BASE}/users`, payload, {
+  //       headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+  //     });
+  //     toast.success('User created successfully');
+  //     await get().fetchUsers();
+  //     get().resetForm();
+  //   } catch (err) {
+  //     console.error('Add User Error', err.response?.data);
+  //     toast.error(err.response?.data?.message || 'Failed to create user');
+  //   } finally {
+  //     set({ isLoading: false });
+  //   }
+  // },
+
+  addUser: async (data) => {
+  if (data.password !== data.confirmPassword) {
+    toast.error('Passwords do not match');
+    return false;
+  }
+
+  set({ isLoading: true });
+
+  try {
+    const token = localStorage.getItem('authToken');
+
+    await axios.post(`${API_BASE}/users`, data, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    toast.success('User created successfully');
+    await get().fetchUsers();
+    return true;
+  } catch (err) {
+    console.error(err.response?.data);
+    toast.error('Failed to create user');
+    return false;
+  } finally {
+    set({ isLoading: false });
+  }
+},
 
 
   // =========================
   // UPDATE USER
   // =========================
-  updateUser: async (id) => {
-    const formData = get().formData;
+  // updateUser: async (id) => {
+  //   const formData = get().formData;
 
-    const payload = {
-      first_name: formData.first_name,
-      middle_name: formData.middle_name,
-      last_name: formData.last_name,
-      gender: formData.gender,
-      role_id: formData.role_id,
-      status_id: formData.status_id,
-      location_id: formData.location_id,
-      phone: formData.phone,
-      email: formData.email,
-      password: formData.password || undefined, // optional
-    };
+  //   const payload = {
+  //     first_name: formData.first_name,
+  //     middle_name: formData.middle_name,
+  //     last_name: formData.last_name,
+  //     gender: formData.gender,
+  //     role_id: formData.role_id,
+  //     status_id: formData.status_id,
+  //     location_id: formData.location_id,
+  //     phone: formData.phone,
+  //     email: formData.email,
+  //     password: formData.password || undefined, // optional
+  //   };
 
-    set({ isLoading: true });
-    try {
-      const token = localStorage.getItem('authToken');
-      await axios.put(`${API_BASE}/users/${id}`, payload, {
-        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-      });
-      toast.success('User updated successfully');
-      await get().fetchUsers();
-      get().resetForm();
-    } catch (err) {
-      console.error('Update User Error', err.response?.data);
-      toast.error(err.response?.data?.message || 'Failed to update user');
-    } finally {
-      set({ isLoading: false });
-    }
-  },
+  //   set({ isLoading: true });
+  //   try {
+  //     const token = localStorage.getItem('authToken');
+  //     await axios.put(`${API_BASE}/users/${id}`, payload, {
+  //       headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+  //     });
+  //     toast.success('User updated successfully');
+  //     await get().fetchUsers();
+  //     get().resetForm();
+  //   } catch (err) {
+  //     console.error('Update User Error', err.response?.data);
+  //     toast.error(err.response?.data?.message || 'Failed to update user');
+  //   } finally {
+  //     set({ isLoading: false });
+  //   }
+  // },
+
+  updateUser: async (id, data) => {
+  set({ isLoading: true });
+
+  try {
+    const token = localStorage.getItem('authToken');
+
+    await axios.put(`${API_BASE}/users/${id}`, data, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    toast.success('User updated successfully');
+    await get().fetchUsers();
+    return true;
+  } catch (err) {
+    console.error(err.response?.data);
+    toast.error('Failed to update user');
+    return false;
+  } finally {
+    set({ isLoading: false });
+  }
+}
   
 
   // Fetch user groups

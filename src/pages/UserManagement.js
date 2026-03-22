@@ -3,7 +3,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './UserManagement.css';
 import { useUserManagement } from '../store/useUserManagement';
-import Locations from './Locations3';
+import Locations from './Locations';
 
 // const availablePermissions = [
 //   'Account Create', 'Account Delete', 'Account Edit', 'Account View',
@@ -78,7 +78,7 @@ const UserManagement = () => {
     e.preventDefault();
 
     // build FormData for file + text inputs
-  const formDataToSend = new FormData();
+  const payload = { ...formData };
   Object.keys(formData).forEach((key) => {
     if (formData[key] !== null) {
       formDataToSend.append(key, formData[key]);
@@ -88,10 +88,10 @@ const UserManagement = () => {
     let success = false;
 
     if (isEditingId) {
-      success = await updateUser(isEditingId, formDataToSend, true); // true = multipart
+      success = await updateUser(isEditingId, payload); // true = multipart
       if (success) toast.success("User updated successfully");
     } else {
-      success = await addUser(formDataToSend, true);
+      success = await addUser(payload);
       if (success) toast.success("User added successfully");
     }
 
@@ -173,9 +173,9 @@ const UserManagement = () => {
           <input name="first_name" placeholder="First Name" value={formData.first_name} onChange={handleChange} />
           {errors.first_name && <p className="error">{errors.first_name[0]}</p>}
           <input name="middle_name" placeholder="Middle Name" value={formData.middle_name} onChange={handleChange} />
-          {errors.last_name && <p className="error">{errors.middle_name[0]}</p>}
+          {errors.middle_name && <p className="error">{errors.middle_name[0]}</p>}
           <input name="last_name" placeholder="Last Name" value={formData.last_name} onChange={handleChange} />
-          {errors.middle_name && <p className="error">{errors.last_name[0]}</p>}
+          {errors.last_name && <p className="error">{errors.last_name[0]}</p>}
         </div>
 
         <div className="form-row">
