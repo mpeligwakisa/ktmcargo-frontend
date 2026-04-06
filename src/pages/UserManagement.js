@@ -79,20 +79,15 @@ const UserManagement = () => {
 
     // build FormData for file + text inputs
   const payload = { ...formData };
-  Object.keys(formData).forEach((key) => {
-    if (formData[key] !== null) {
-      formDataToSend.append(key, formData[key]);
-    }
-  });
-
-    let success = false;
+  
+  let success = false;
 
     if (isEditingId) {
       success = await updateUser(isEditingId, payload); // true = multipart
-      if (success) toast.success("User updated successfully");
+      //if (success) toast.success("User updated successfully");
     } else {
       success = await addUser(payload);
-      if (success) toast.success("User added successfully");
+      //if (success) toast.success("User added successfully");
     }
 
     //const payload = {...formData};

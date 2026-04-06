@@ -224,7 +224,7 @@ export const useUserManagement = create((set, get) => ({
   } finally {
     set({ isLoading: false });
   }
-}
+},
   
 
   // Fetch user groups
